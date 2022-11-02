@@ -6,7 +6,6 @@ import cors from "cors";
 
 app.use(express.json()); //express.json() is a method built in express to recognize the incoming Request Object as a JSON Object. This method is called as a middleware in your application using the code: app.use(express.json());
 app.use(cors());
-// app.use(express.urlencoded({ extended: false }));
 
 mongoose.connect(
   "mongodb+srv://danielhabila:dcrkJBxkNWWotJYx@cluster0.teaczby.mongodb.net/qdiary?retryWrites=true&w=majority"
@@ -15,6 +14,16 @@ mongoose.connect(
 app.get("/getQuotes", (request, response) => {
   quotingModel.find({}, (err, result) => {
     //the curly braces within the find method means return everything from quotingModel
+    if (err) {
+      response.json(err);
+    } else {
+      response.json(result);
+    }
+  });
+});
+
+app.get("/getRandom", (request, response) => {
+  quotingModel.aggregate([{ $sample: { size: 1 } }], (err, result) => {
     if (err) {
       response.json(err);
     } else {
