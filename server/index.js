@@ -1,6 +1,7 @@
 import express, { response } from "express";
 const app = express();
 import mongoose from "mongoose";
+import { ObjectId } from "mongoose";
 import quotingModel from "./models/quoting.js";
 import cors from "cors";
 
@@ -47,7 +48,7 @@ app.put("/update", async (request, response) => {
   const updateAuthor = request.body.updateAuthor;
 
   try {
-    quotingModel.findById(id, (err, QuoteToUpdate) => {
+    await quotingModel.findById(id, (err, QuoteToUpdate) => {
       QuoteToUpdate.quote = updateQuote;
       QuoteToUpdate.author = updateAuthor;
 
@@ -59,6 +60,20 @@ app.put("/update", async (request, response) => {
   response.send("updated");
 });
 
+app.delete("/delete/:id", async (request, response) => {
+  try {
+    const id = request.params.id;
+    await quotingModel.findByIdAndRemove(id).exec();
+  } catch (err) {
+    console.log(err);
+  }
+  response.send("item deleted");
+});
+
 app.listen(3001, () => {
   console.log("server is running great");
 });
+
+// const id = request.params.id;
+// const convertedId = ObjectId(id);
+// await quotingModel.findByIdAndRemove(convertedId).exec();
