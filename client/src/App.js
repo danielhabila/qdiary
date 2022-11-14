@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home";
-import Edit from "./Pages/Edit";
+import AddToList from "./Pages/AddToList";
 import ListOfQuotes from "./Components/ListOfQuotes";
 import ErrorPage from "./Pages/ErrorPage";
+import MainCard from "./Components/MainCard";
+
+import Navbar from "./Components/Navbar";
+import FeaturedGrid from "./Components/FeaturedGrid";
+import Buttons from "./Components/Buttons";
 
 function App() {
   const inputRef = useRef(null);
@@ -87,18 +91,25 @@ function App() {
   return (
     <div>
       <Router>
+        <Navbar />
         <Routes>
           <Route
             path="/"
             element={
-              <Home randomQuote={randomQuote} aRandomQuote={aRandomQuote} />
+              <div>
+                <MainCard
+                  randomQuote={randomQuote}
+                  aRandomQuote={aRandomQuote}
+                />
+                <Buttons aRandomQuote={aRandomQuote} />
+              </div>
             }
           />
           <Route
             path="/Edit"
             element={
               <div>
-                <Edit
+                <AddToList
                   setAddQuote={setAddQuote}
                   setAddAuthor={setAddAuthor}
                   handleSubmit={handleSubmit}
